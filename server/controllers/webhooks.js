@@ -2,7 +2,6 @@ import { Webhook } from "svix";
 import User from "../models/User.js";
 
 export const clerkWebhooks = async (req, res) => {
-    console.log("🔥 WEBHOOK HIT");
     try {
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
@@ -13,8 +12,6 @@ export const clerkWebhooks = async (req, res) => {
         })
 
         const { type, data } = req.body;
-        console.log("EVENT TYPE:", type);
-        console.log("USER DATA:", data);
 
         switch (type) {
             case "user.created": {
@@ -27,7 +24,6 @@ export const clerkWebhooks = async (req, res) => {
                 };
 
                 await User.create(userData);
-                console.log("USER SAVED TO DB");
                 break;
             }
 
@@ -45,10 +41,8 @@ export const clerkWebhooks = async (req, res) => {
                 break;
             }
         }
-
-        res.status(200).json({ success: true });
     } catch (err) {
         console.error("Webhook Error:", err);
-        res.status(400).json({ success: false });
+        res.status(400).json({ success: false, message: err.message });
     }
 };

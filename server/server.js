@@ -6,12 +6,15 @@ import connectDB from "./config/db.js";
 // import * as Sentry from "@sentry/node"
 import { clerkWebhooks } from "./controllers/webhooks.js";
 import User from "./models/User.js";
+import companyRoutes from "./routes/companyRoutes.js"
+import connectCloudinary from "./config/cloudinary.js";
 
 // initialise express
 const app = express();
 
 // connect to db
 await connectDB();
+await connectCloudinary();
 
 // middlewares
 app.use(cors());
@@ -25,23 +28,7 @@ app.get("/debug-sentry", function mainHandler(req, res) {
     throw new Error("My first Sentry error!");
 });
 app.post("/webhooks", express.raw({ type: "application/json" }), clerkWebhooks);
-
-app.get("/test-db", async (req, res) => {
-    try {
-        const user = await User.create({
-            _id: "test_123",
-            name: "Test User",
-            email: "test@example.com",
-            image: "test.png",
-        });
-
-        res.json(user);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    }
-});
-
+app.use('/api/company', companyRoutes)
 
 // port
 const PORT = process.env.PORT || 5000;
