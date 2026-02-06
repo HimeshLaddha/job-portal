@@ -1,5 +1,6 @@
 import JobApplication from "../models/jobApplication.js";
 import User from "../models/User.js";
+import Job from "../models/Job.js";
 import { v2 as cloudinary } from "cloudinary";
 
 
@@ -24,7 +25,7 @@ export const getUserData = async (req, res) => {
 // apply for a job
 export const applyForJob = async (req, res) => {
     const { jobId } = req.body;
-    const { userId } = req.auth.userId;
+    const userId = req.auth.userId;
 
     try {
         const isAlreadyApplied = await JobApplication.find({ jobId, userId });
@@ -59,8 +60,8 @@ export const getUserJobApplications = async (req, res) => {
         const userId = req.auth.userId;
 
         const applications = await JobApplication.find({ userId })
-            .populate("companyId", 'name email image')
-            .populate("jobId", "title, description location category level salary")
+            .populate("companyId", "name email image")
+            .populate("jobId", "title description location category level salary")
             .exec();
 
         if (!applications) {
