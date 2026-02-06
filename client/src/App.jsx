@@ -8,7 +8,7 @@ import { AppContext } from './context/AppContext'
 import Dashboard from './pages/Dashboard'
 import AddJobs from './pages/AddJobs'
 import ManageJobs from './pages/ManageJobs'
-import ViewApplications from './pages/viewApplications'
+import ViewApplications from './pages/ViewApplications'
 import 'quill/dist/quill.snow.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
